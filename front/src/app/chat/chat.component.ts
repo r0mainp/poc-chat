@@ -4,6 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { WebsocketService } from '../service/websocket.service';
 
 @Component({
   selector: 'app-chat',
@@ -22,7 +23,12 @@ export class ChatComponent {
   name: string = '';
   connected: boolean = false;
 
+  constructor(private webSocketService: WebsocketService) {}
+
   connect() {
-    this.connected = true;
+    this.webSocketService.connect(() => {
+      console.log('ok')
+      this.connected = true;
+    });
   }
 }
