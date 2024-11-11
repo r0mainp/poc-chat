@@ -14,7 +14,7 @@ import { WebsocketService } from '../service/websocket.service';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
@@ -22,13 +22,22 @@ import { WebsocketService } from '../service/websocket.service';
 export class ChatComponent {
   name: string = '';
   connected: boolean = false;
+  message: string = '';
+  messages: Array<{ name: string, content: string }> = [];
 
   constructor(private webSocketService: WebsocketService) {}
 
   connect() {
-    this.webSocketService.connect(() => {
-      console.log('ok')
-      this.connected = true;
+    this.webSocketService.connect((msg) => {
+      this.messages.push(msg);
     });
+    this.connected = true;
+  }
+
+  sendMessage(): void {
+    if (this.message.trim() !== '') {
+      this.webSocketService.sendMessage(this.name, this.message);
+      this.message = '';
+    }
   }
 }

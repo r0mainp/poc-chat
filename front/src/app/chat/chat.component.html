@@ -1,7 +1,29 @@
 <div>
-    <input [(ngModel)]="name" placeholder="Enter your name" *ngIf="!connected" />
-    <button (click)="connect()" *ngIf="!connected">Join Chat</button>
+    <div *ngIf="!connected" >
+        <mat-form-field>
+            <input 
+                matInput
+                [(ngModel)]="name" 
+                placeholder="Enter your name" 
+                required
+            />
+        </mat-form-field>
+        <button 
+            mat-raised-button 
+            color="primary"
+            (click)="connect()" 
+        >
+            Join Chat
+        </button>
+    </div>
 </div>
 <div *ngIf="connected">
-    Connected to chat
-</div>
+    <h3>Chat Room</h3>
+    <div *ngFor="let msg of messages">
+      <strong>{{ msg.name }}:</strong> {{ msg.content }}
+    </div>
+    <mat-form-field>
+      <input matInput [(ngModel)]="message" placeholder="Type a message" />
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="sendMessage()">Send</button>
+  </div>

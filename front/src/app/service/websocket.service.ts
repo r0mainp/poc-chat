@@ -15,11 +15,18 @@ export class WebsocketService {
     })
   }
 
-  connect(cb: ()=> void): void {
+  connect(onNewMessage: (message: any) => void): void {
     this.client.onConnect = () => {
-      console.log('Connected to WebSocket');
-      cb();
+      this.client.subscribe('/topic/messages', (message) => {
+        const msg = JSON.parse(message.body);
+        onNewMessage(msg);
+      });
     };
     this.client.activate();
+  }
+
+  sendMessage(name: string, content: string): void {
+    const msg = { name, content };
+    this.client.publish({ destination: '/app/message', body: JSON.stringify(msg) });
   }
 }
